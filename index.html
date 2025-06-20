@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Custom API Server</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body class="h-screen flex bg-gradient-to-br from-slate-700 to-slate-900 text-yellow-500">
+    <!-- side bar -->
+    <div class="w-1/4 shadow-lg p-4 h-full flex flex-col bg-slate-900">        
+        <div>
+            <h3 class="font-bold mt-2 mb-2">Don't see the game you want? Add one! </h3>
+            <form id="addGameForm" action="">
+                <input type="text" id="gameName" name="gameName" placeholder="Name..." class="w-full p-2 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"><br>
+                <input type="text" id="gamePlatform" name="gamePlatform" placeholder="Platform..." class="w-full p-2 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"><br><br>
+                <input type="submit" value="Submit" class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">
+                <p id="addGameMessage" class="text-red-600 mt-2"></p>
+            </form> 
+        </div>
+
+
+        <div class="pt-10 flex flex-col justify-center items-center">
+            <h2 class="text-2xl font-bold p-2">Surpise me!</h2>
+            <button id="random" type="button" class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900">Generate Random Game Suggestion</button>
+            <p id="randomResult" class="p-2 text-xl"></p>
+        </div>
+    </div>
+
+    <!-- main content -->
+    <div class="flex-1 flex flex-col justify-center items-center">
+        <h1 class="text-4xl font-bold p-10">Game Collection API</h1>
+        <input id="searchBar" type="search" placeholder="Search..." class="text-black w-1/2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div class="p-2">
+            <p id="searchResults"></p>
+        </div>
+    </div>
+
+    <!-- wish list -->
+    <div class="flex flex-col justify-center">
+        <h2 class="text-3xl font-bold p-10 text-center"> Your Wishlist </h2>
+        <div class="text-black bg-gray-300 p-4 rounded h-2/3 w-2/3 mx-auto shadow-md">
+            <ul id="wishlist"></ul>
+        </div>
+    </div>
+</body>
+
+    <script>
+       // *******************  SEARCH RESULTS **********************
+       document.getElementById('searchBar').addEventListener('keyup', async () => {
+            const query = document.getElementById('searchBar').value;
+
+            // ff query is empty, clear results and stop
+            if (query.trim() === "") {
+                document.getElementById('searchResults').innerHTML = "";
+                return;
+            }
+
+            try {
+                const res = await fetch(`http://localhost:8000/games/search?q=${encodeURIComponent(query)}`);
+                if (!res.ok) {
+                    throw new Error("No games found.");
+                }
+
+                const games = await res.json();
+
+                // render results
+                const resultList = games.map(game => `
+                                <li class="flex p-2 border-b flex items-center space-x-3">
+                                    ${game.name} (${game.platform})
+                                    <button type="button" class="fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900" onclick="addToWishlist('${game.name}', '${game.platform}')">Add to Wishlist</button>
+                                </li>
+                            `).join("");                
+                document.getElementById('searchResults').innerHTML = resultList;
+
+            } catch (err) {
+                document.getElementById('searchResults').innerHTML = `<li>${err.message}</li>`;
+            }
+        });
+
+        // *******************  WISHLIST **********************
+
+        let wishlistItems = [] // declare empty list to store games
+
+        // add games to wishlist
+        function addToWishlist(name, platform){
+            if (wishlistItems.some(item => item.name === name && item.platform === platform)) {
+                alert("This game is already in your wishlist!")
+                return
+            }
+
+            // parse wishlist
+            wishlistItems.push({ name, platform });
+
+            renderWishlist();
+        }
+
+        function removeItem(name, platform) {
+            wishlistItems = wishlistItems.filter(item => !(item.name === name && item.platform === platform)); 
+
+            renderWishlist();            
+        }
+
+        function renderWishlist() {
+            const wishlistElement = document.getElementById('wishlist');
+            wishlistElement.innerHTML = wishlistItems.map(item => `
+                <li class="flex items-center">${item.name} (${item.platform})
+                <button type="button" class="flex fold-bold relative inline-block h-full w-full rounded border-2 border-black bg-white m-2 px-3 py-1 text-base font-bold text-black transition duration-100 hover:bg-yellow-400 hover:text-gray-900" onclick="removeItem('${item.name}', '${item.platform}')">Remove</button>
+                </li>
+            `).join("");
+        }
+
+
+        // *******************  RANDOM SUGGESTION **********************
+        document.getElementById('random').addEventListener('click', async () => {
+            try {
+                const res = await fetch("http://localhost:8000/game/random");
+                if (!res.ok) {
+                    throw new Error("No games found.");
+                }
+                const game = await res.json();
+                document.getElementById('randomResult').textContent = `${game.name} (${game.platform})`;
+            } catch (err) {
+                document.getElementById('randomResult').textContent = err.message;
+            }
+        });
+
+        // *******************  ADD GAMES **********************
+        const allowedPlatforms = ["PlayStation", "XBOX", "PC", "PS1", "PS2", "PS3", "PS4", "PS5", "XboxOne", "Xbox360", "NintendoSwitch"];
+
+        document.getElementById('addGameForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('gameName').value.trim();
+            const platform = document.getElementById('gamePlatform').value.trim();
+
+            if (!name || !platform) {
+                document.getElementById('addGameMessage').textContent = "Please fill in all fields.";
+                return;
+            }
+
+            if (!allowedPlatforms.includes(platform)) {
+                document.getElementById('addGameMessage').textContent = "Invalid platform. Please enter a valid one.";
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:8000/games', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, platform })
+                });
+
+                if (!res.ok) {
+                    throw new Error('Game already exists.');
+                }
+
+                document.getElementById('addGameMessage').textContent = "Game added successfully!";
+                document.getElementById('addGameForm').reset();
+            } catch (err) {
+                document.getElementById('addGameMessage').textContent = err.message;
+            }
+        });
+    </script>
+</html>
