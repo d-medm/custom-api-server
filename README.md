@@ -44,7 +44,7 @@ platform: Game platforms
 `python -m venv venv`
 
 ### 3. Activate
-In your terminal, copy and past:
+In your terminal, copy and paste:
 
 Windows:
 `venv\Scripts\activate`
