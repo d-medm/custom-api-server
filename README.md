@@ -64,3 +64,5 @@ Create a .env file to store database url:
 
 ### 7. Access Frontend
 To access the frontend, you can open the `index.html` file using the Live Server extension in VS Code or host it using any simple HTTP server.
+
+![Frontend Img](frontend.jpeg)
