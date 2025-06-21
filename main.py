@@ -87,8 +87,7 @@ async def add_game(game: GameCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Game already exists.")
 
     db_game = Game(**game.model_dump())
-    print(f"GameCreate data: {game.model_dump()}")
-
+    
     db.add(db_game)
     db.commit()
     db.refresh(db_game)

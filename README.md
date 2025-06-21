@@ -53,7 +53,7 @@ MacOS:
 `source venv/bin/activate`
 
 ### 4. Install dependencies: 
-`pip install fastapi uvicorn sqlalchemy pydantic python-dotenv`
+`pip install -r requirements.txt`
 
 ### 5. IMPORTANT: Configure Environment Variables
 Create a .env file to store database url:
