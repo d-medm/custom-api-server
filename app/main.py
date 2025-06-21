@@ -150,7 +150,7 @@ async def delete_game(game_id: int, db: Session = Depends(get_db)):
 # filter by platform (GET)
 @app.get("/games/platform/{platform}", response_model=GameResponse)
 async def filter_by_platform(platform: str, db: Session = Depends(get_db)):
-    db_game = db.query(Game).filter(Game.platform==platform).first()
+    db_game = db.query(Game).filter(Game.platform==platform).all()
 
     if not db_game:
             raise HTTPException(status_code=404, detail="No games under that platform")
