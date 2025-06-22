@@ -1,16 +1,14 @@
 from typing import List
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 import random
 
 #db imports
-import sqlalchemy
 from sqlalchemy.orm import Session, sessionmaker
-import sqlalchemy.orm
 from sqlmodel import SQLModel, Field, create_engine
+from app.models import Game, GameCreate, GameResponse, GameUpdate
 
 load_dotenv()
 
@@ -39,13 +37,6 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# database model
-class Game(SQLModel, table=True):
-    __tablename__ = "games"
-    id: int | None = Field(default=None, primary_key=True)
-    name: str
-    platform: str
-
 # create tables
 SQLModel.metadata.create_all(bind=engine)
 
@@ -54,21 +45,6 @@ def get_db():
     with Session(engine) as session:
         yield session
 
-# pydantic model for request data
-class GameCreate(SQLModel):
-    name: str
-    platform: str
-
-# pydantic model for updating data
-class GameUpdate(SQLModel):
-    name: str
-    platform: str
-
-# pydantic model for response data
-class GameResponse(SQLModel):
-    id: int
-    name: str
-    platform: str
 
 # add new game (POST)
 @app.post("/games", response_model=GameResponse)
