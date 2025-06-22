@@ -5,3 +5,4 @@ sqlmodel
 pydantic 
 python-dotenv
 pytest-mock
+httpx
