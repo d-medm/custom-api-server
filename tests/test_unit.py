@@ -1,4 +1,3 @@
-import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
 from app.models import Game, GameCreate, GameResponse, GameUpdate
