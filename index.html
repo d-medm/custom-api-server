@@ -112,7 +112,7 @@
         // *******************  RANDOM SUGGESTION **********************
         document.getElementById('random').addEventListener('click', async () => {
             try {
-                const res = await fetch("http://localhost:8000/game/random");
+                const res = await fetch("http://localhost:8000/games/random");
                 if (!res.ok) {
                     throw new Error("No games found.");
                 }

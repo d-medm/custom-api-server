@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.main import app, get_db
+from app.routes import app, get_db
 
 from random import randint
 
