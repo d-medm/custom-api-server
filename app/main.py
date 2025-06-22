@@ -7,10 +7,10 @@ from dotenv import load_dotenv
 import random
 
 #db imports
-from sqlalchemy import create_engine, Column, Integer, String
 import sqlalchemy
 from sqlalchemy.orm import Session, sessionmaker
 import sqlalchemy.orm
+from sqlmodel import SQLModel, Field, create_engine
 
 load_dotenv()
 
@@ -38,38 +38,34 @@ app.add_middleware(
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = sqlalchemy.orm.declarative_base()
 
 # database model
-class Game(Base):
+class Game(SQLModel, table=True):
     __tablename__ = "games"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    platform = Column(String)
+    id: int | None = Field(default=None, primary_key=True)
+    name: str
+    platform: str
 
 # create tables
-Base.metadata.create_all(bind=engine)
+SQLModel.metadata.create_all(bind=engine)
 
 # dependency to get db session
 def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    with Session(engine) as session:
+        yield session
 
 # pydantic model for request data
-class GameCreate(BaseModel):
+class GameCreate(SQLModel):
     name: str
     platform: str
 
 # pydantic model for updating data
-class GameUpdate(BaseModel):
+class GameUpdate(SQLModel):
     name: str
     platform: str
 
 # pydantic model for response data
-class GameResponse(BaseModel):
+class GameResponse(SQLModel):
     id: int
     name: str
     platform: str

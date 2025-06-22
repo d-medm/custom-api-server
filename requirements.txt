@@ -1,5 +1,7 @@
 fastapi 
 uvicorn 
-sqlalchemy 
+sqlalchemy
+sqlmodel
 pydantic 
 python-dotenv
+pytest-mock
