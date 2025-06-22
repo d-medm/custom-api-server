@@ -7,7 +7,7 @@ from app.database import get_db
 
 # creating a separate database 
 # so we dont perform operations on our main database
-engine = create_engine("sqlite:///./test_test.db", connect_args={"check_same_thread": False})
+engine = create_engine("sqlite:///./test.db", connect_args={"check_same_thread": False})
 
 @pytest.fixture(name="session")
 def session_fixture():
