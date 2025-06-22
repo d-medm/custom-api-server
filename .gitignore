@@ -4,3 +4,5 @@ env/
 venv/
 *.pyc
 __pycache__/
+.coverage
+.coverage.*

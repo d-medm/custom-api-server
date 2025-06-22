@@ -2,9 +2,8 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.routes import app, get_db
-
-from random import randint
+from app.main import app
+from app.database import get_db
 
 # creating a separate database 
 # so we dont perform operations on our main database
@@ -24,7 +23,6 @@ def session_fixture():
 @pytest.fixture(name="client")
 def client_fixture(session):
     """Fixture for creating a new TestClient for each test."""
-
     def override_get_db():
         yield session
 

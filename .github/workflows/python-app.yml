@@ -1,0 +1,39 @@
+# This workflow will run pytest 
+# automatically for pull requests
+
+name: Python application
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
+
+jobs: 
+    build:
+        environment: Dev
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
+
+        steps:
+        - uses: actions/checkout@v4
+        
+        - name: Set up Python 3.12
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.12"
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            if [ -f dev-requirements.txt ]; then pip install -r dev-requirements.txt; fi
+          
+        - name: Test Pytests
+          env:
+            DATABASE_URL: ${{ vars.DATABASE_URL }}
+          run: |
+            pytest
