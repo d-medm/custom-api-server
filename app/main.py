@@ -105,6 +105,18 @@ async def search(q: str, db: Session = Depends(get_db)):
     
     return db_game
 
+# generate a random game suggestion
+@app.get("/games/random", response_model=GameResponse)
+async def get_random(db: Session = Depends(get_db)):
+    db_game = db.query(Game).all()
+
+    if not db_game:
+        raise HTTPException(status_code=404, detail="No games available!")
+
+    random_game = random.choice(db_game)
+
+    return random_game
+
 # info about specific game
 @app.get("/games/{game_id}", response_model=GameResponse)
 async def get_specific_game(game_id: int, db: Session = Depends(get_db)):
@@ -144,7 +156,7 @@ async def delete_game(game_id: int, db: Session = Depends(get_db)):
     return db_game
 
 # filter by platform (GET)
-@app.get("/games/platform/{platform}", response_model=GameResponse)
+@app.get("/games/platform/{platform}", response_model=list[GameResponse])
 async def filter_by_platform(platform: str, db: Session = Depends(get_db)):
     db_game = db.query(Game).filter(Game.platform==platform).all()
 
@@ -152,12 +164,3 @@ async def filter_by_platform(platform: str, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="No games under that platform")
     
     return db_game
-
-# generate a random game suggestion
-@app.get("/game/random", response_model=GameResponse)
-async def get_random(db: Session = Depends(get_db)):
-    db_game = db.query(Game).all()
-
-    random_game = random.choice(db_game)
-
-    return random_game
