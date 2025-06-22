@@ -68,7 +68,7 @@ To access the frontend, you can open the `index.html` file using the Live Server
 ![Frontend Img](frontend.jpeg)
 
 ## Tests
-The app uses pytest and pytestmock for integration and unit tests.
+Tech stack: Pytest, Pytest-mock, SQLAlchemy
 
 ### To run the tests:
 `pytest`
@@ -77,6 +77,10 @@ The app uses pytest and pytestmock for integration and unit tests.
 <img src="https://github.com/user-attachments/assets/92367009-7a28-49ef-9a84-db736c3a7c81" width="50%">
 
 ### To run coverage:
+To install coverage:
+`pip install pytest-cov`
+
+Run pytest-cov:
 `pytest --cov=app tests/`
 
 #### Example output:
