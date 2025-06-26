@@ -66,3 +66,25 @@ Create a .env file to store database url:
 To access the frontend, you can open the `index.html` file using the Live Server extension in VS Code or host it using any simple HTTP server.
 
 ![Frontend Img](frontend.jpeg)
+
+## Tests
+Tech stack: Pytest, Pytest-mock, SQLAlchemy
+
+### To run the tests:
+`pytest`
+
+#### Example output:
+<img src="https://github.com/user-attachments/assets/92367009-7a28-49ef-9a84-db736c3a7c81" width="50%">
+
+### To run coverage:
+To install coverage:
+`pip install pytest-cov`
+
+Run pytest-cov:
+`pytest --cov=app tests/`
+
+#### Example output:
+<img src="https://github.com/user-attachments/assets/6f397a9e-718b-4b19-8c63-d5cf3a0aa665" width="50%">
+
+
+
