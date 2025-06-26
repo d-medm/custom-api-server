@@ -41,12 +41,13 @@ jobs:
         - name: Install Keploy CLI
           run: |
             curl --silent -L https://keploy.io/ent/install.sh | bash
-            echo "Keploy version:"
-            keploy --version
-            echo "PATH: $PATH"
-
+          
+        - name: Check Keploy Help
+          run: |
+            keploy test-suite --help
+            
         - name: Run Keploy Test Suite
           env:
-            echo "API Key present: ${{ secrets.KEPLOY_API_KEY != '' }}"
+            KEPLOY_API_KEY: ${{ secrets.KEPLOY_API_KEY }}
           run: |
             keploy test-suite --app=cc3fad0f-1f06-4bdf-b408-18628bca5c8b --base-path http://localhost:8000/ --cloud
