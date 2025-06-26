@@ -38,6 +38,11 @@ jobs:
           run: |
             pytest
 
+        - name: Run FastAPI server
+          run: |
+            uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+
+
         - name: Install Keploy CLI
           run: |
             curl --silent -L https://keploy.io/ent/install.sh | bash
