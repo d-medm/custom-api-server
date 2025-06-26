@@ -34,6 +34,6 @@ jobs:
           
         - name: Test Pytests
           env:
-            DATABASE_URL: ${{ vars.DATABASE_URL }}
+            DATABASE_URL: sqlite:///./test_test.db
           run: |
             pytest
