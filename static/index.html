@@ -44,6 +44,9 @@
 </body>
 
     <script>
+        // make it so you can access endpoints via localhost or render
+        const api = window.location.hostname.includes("localhost") ? "https://localhost:8000" : "https://custom-api-server-64rw.onrender.com";
+            
        // *******************  SEARCH RESULTS **********************
        document.getElementById('searchBar').addEventListener('keyup', async () => {
             const query = document.getElementById('searchBar').value;
@@ -55,7 +58,7 @@
             }
 
             try {
-                const res = await fetch(`http://localhost:8000/games/search?q=${encodeURIComponent(query)}`);
+                const res = await fetch(`{api}/games/search?q=${encodeURIComponent(query)}`);
                 if (!res.ok) {
                     throw new Error("No games found.");
                 }
@@ -112,7 +115,7 @@
         // *******************  RANDOM SUGGESTION **********************
         document.getElementById('random').addEventListener('click', async () => {
             try {
-                const res = await fetch("http://localhost:8000/games/random");
+                const res = await fetch("{api}/games/random");
                 if (!res.ok) {
                     throw new Error("No games found.");
                 }
@@ -143,7 +146,7 @@
             }
 
             try {
-                const res = await fetch('http://localhost:8000/games', {
+                const res = await fetch('{api}/games', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, platform })
