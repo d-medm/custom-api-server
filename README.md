@@ -86,5 +86,7 @@ Run pytest-cov:
 #### Example output:
 <img src="https://github.com/user-attachments/assets/6f397a9e-718b-4b19-8c63-d5cf3a0aa665" width="50%">
 
+## Keploy Test Report
+<img src="https://github.com/user-attachments/assets/5aa78f1c-f60a-496c-a941-4aadea3d6165" width="50%">
 
 
