@@ -1,5 +1,6 @@
 #info about the app
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import router as game_router
 
@@ -7,6 +8,8 @@ app = FastAPI(
     title="Game Collection API", 
     version="0.1.0"
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
     "http://localhost:5500",
