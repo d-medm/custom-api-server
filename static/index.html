@@ -58,7 +58,7 @@
             }
 
             try {
-                const res = await fetch(`{api}/games/search?q=${encodeURIComponent(query)}`);
+                const res = await fetch(`${api}/games/search?q=${encodeURIComponent(query)}`);
                 if (!res.ok) {
                     throw new Error("No games found.");
                 }
@@ -115,7 +115,7 @@
         // *******************  RANDOM SUGGESTION **********************
         document.getElementById('random').addEventListener('click', async () => {
             try {
-                const res = await fetch(`{api}/games/random`);
+                const res = await fetch(`${api}/games/random`);
                 if (!res.ok) {
                     throw new Error("No games found.");
                 }
@@ -146,7 +146,7 @@
             }
 
             try {
-                const res = await fetch(`{api}/games`, {
+                const res = await fetch(`${api}/games`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, platform })
