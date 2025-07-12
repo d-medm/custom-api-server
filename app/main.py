@@ -12,6 +12,7 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
+    "https://custom-api-server-64rw.onrender.com",
     "http://localhost:5500",
     "localhost:5500",
     "http://127.0.0.1:5500",
@@ -20,7 +21,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://custom-api-server-64rw.onrender.com/static/index.html"],
+    allow_origins=["https://custom-api-server-64rw.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
